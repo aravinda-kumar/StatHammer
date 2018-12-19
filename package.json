@@ -21,18 +21,19 @@
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
     "@ionic-native/core": "5.0.0-beta.21",
+    "@ionic-native/dialogs": "^5.0.0-beta.21",
     "@ionic-native/splash-screen": "5.0.0-beta.21",
     "@ionic-native/status-bar": "5.0.0-beta.21",
     "@ionic/angular": "4.0.0-beta.16",
     "@ionic/pro": "2.0.3",
-    "core-js": "^2.5.4",
-    "rxjs": "~6.3.3",
-    "zone.js": "~0.8.26",
-    "@ionic-native/dialogs": "^5.0.0-beta.21",
     "@ionic/storage": "^2.2.0",
     "cordova-plugin-dialogs": "^2.0.1",
+    "cordova-plugin-ionic": "5.2.8",
     "cordova-sqlite-storage": "2.5.0",
-    "droll": "^0.2.1"
+    "core-js": "^2.5.4",
+    "droll": "^0.2.1",
+    "rxjs": "~6.3.3",
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.10.0",
@@ -64,7 +65,12 @@
   "cordova": {
     "plugins": {
       "cordova-sqlite-storage": {},
-      "cordova-plugin-dialogs": {}
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "81602272",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "background"
+      }
     }
   }
 }

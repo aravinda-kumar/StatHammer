@@ -1,0 +1,375 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-input [(ngModel)]="properties.name"></ion-input>
+    </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button size="small" (click)="throwDice()">
+        <ion-icon slot="icon-only" name="refresh" fill="clear"></ion-icon>
+      </ion-button>
+      <ion-button size="small">
+        <ion-icon slot="icon-only" name="bookmark" fill="clear"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list class="layouts-list">
+
+    <!-- Defender information -->
+    <ion-row class="list-item" no-padding>
+      <ion-col no-padding class="item-content">
+        <h3 class="item-title">Defender</h3>
+
+        <ion-slides pager="true" [options]="slideOpts">
+          <!-- General Defender settings -->
+          <ion-slide>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Toughness</ion-label>
+                    <ion-input type="number" [(ngModel)]="properties.defender.toughness"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label># Wounds</ion-label>
+                    <ion-input type="number" [(ngModel)]="properties.defender.wounds"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Save</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="properties.defender.save">
+                      <ion-select-option value="-">No</ion-select-option>
+                      <ion-select-option value="6">6+</ion-select-option>
+                      <ion-select-option value="5">5+</ion-select-option>
+                      <ion-select-option value="4">4+</ion-select-option>
+                      <ion-select-option value="3">3+</ion-select-option>
+                      <ion-select-option value="2">2+</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Inv Save</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="properties.defender.invSave">
+                      <ion-select-option value="-">No</ion-select-option>
+                      <ion-select-option value="6">6++</ion-select-option>
+                      <ion-select-option value="5">5++</ion-select-option>
+                      <ion-select-option value="4">4++</ion-select-option>
+                      <ion-select-option value="3">3++</ion-select-option>
+                      <ion-select-option value="2">2++</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-button shape="round" size="small" fill="{{defenderTemplate.geq}}" (click)="setDefenderTmp('geq')">GEQ</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button shape="round" size="small" fill="{{defenderTemplate.meq}}" (click)="setDefenderTmp('meq')">MEQ</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button shape="round" size="small" fill="{{defenderTemplate.veq}}" (click)="setDefenderTmp('veq')">VEQ</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button shape="round" size="small" fill="{{defenderTemplate.keq}}" (click)="setDefenderTmp('keq')">KEQ</ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row><br /></ion-row>
+            </ion-grid>
+          </ion-slide>
+          <ion-slide>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Reroll Save</ion-label>
+                    <ion-checkbox slot="end" checked="{{properties.defender.rerollSave}}"></ion-checkbox>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Reroll Inv Save</ion-label>
+                    <ion-checkbox slot="end" checked="{{properties.defender.rerollInvSave}}"></ion-checkbox>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Ignore damages on:</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="properties.defender.ignoreDamage">
+                      <ion-select-option value="-">No</ion-select-option>
+                      <ion-select-option value="6">6+++</ion-select-option>
+                      <ion-select-option value="5">5+++</ion-select-option>
+                      <ion-select-option value="4">4+++</ion-select-option>
+                      <ion-select-option value="3">3+++</ion-select-option>
+                      <ion-select-option value="2">2+++</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-slide>
+        </ion-slides>
+
+      </ion-col>
+    </ion-row>
+
+    <!-- Statistical result -->
+    <ion-row class="list-item" no-padding>
+      <ion-col no-padding class="item-content">
+        <h3 class="item-title">Results</h3>
+
+        <!-- Selector for probability selection (default 50%) -->
+        <ion-range min="10" max="90" step="5" pin="true" [(ngModel)]="results.probability">
+        </ion-range>
+
+        <ion-slides pager="true" [options]="statisticsSlideOpts">
+          <ion-slide>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Shots</ion-card-subtitle>
+                      <ion-card-title>{{results.shotCount | number:'1.0-2'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Hits</ion-card-subtitle>
+                      <ion-card-title>{{results.hitCount | number:'1.0-2'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Wounds</ion-card-subtitle>
+                      <ion-card-title>{{results.woundCount | number:'1.0-2'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Unsaved</ion-card-subtitle>
+                      <ion-card-title>{{results.unsavedWoundCount | number:'1.0-2'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Damages</ion-card-subtitle>
+                      <ion-card-title>{{results.totalDamage | number:'1.0-2'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+
+                <ion-col>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-subtitle>Deads</ion-card-subtitle>
+                      <ion-card-title>{{results.modelDead | number:'1.0-0'}}</ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+
+              <ion-row><br /></ion-row>
+            </ion-grid>
+          </ion-slide>
+          <ion-slide>
+            <i>Charts about probability distribution of damage output based on probability level (distribution)</i>
+          </ion-slide>
+        </ion-slides>
+
+      </ion-col>
+    </ion-row>
+
+    <!-- Attackers definition -->
+    <ion-row class="list-item" no-padding>
+      <ion-col no-padding class="item-content">
+        <h3 class="item-title">Attackers
+
+          <ion-buttons slot="end">
+            <ion-button size="small" (click)="addAttacker()">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+            <ion-button size="small" (click)="delAttacker()">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </h3>
+
+        <ion-slides #attackerSlides pager="true" [options]="attackersSlideOpts">
+          <ion-slide *ngFor="let attacker of attackerLst">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label># Shots</ion-label>
+                    <ion-input [(ngModel)]="attacker.weaponShot"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>BS/WS</ion-label>
+                    <ion-input [(ngModel)]="attacker.hitStat"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>S</ion-label>
+                    <ion-input [(ngModel)]="attacker.weaponS"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>AP</ion-label>
+                    <ion-input [(ngModel)]="attacker.weaponAP"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>D</ion-label>
+                    <ion-input [(ngModel)]="attacker.weaponD"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Hit Mod</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="attacker.hitRollMod">
+                      <ion-select-option value="+0">No</ion-select-option>
+                      <ion-select-option value="A">Auto</ion-select-option>
+                      <ion-select-option value="+1">+1</ion-select-option>
+                      <ion-select-option value="+2">+2</ion-select-option>
+                      <ion-select-option value="+3">+3</ion-select-option>
+                      <ion-select-option value="+4">+4</ion-select-option>
+                      <ion-select-option value="+5">+5</ion-select-option>
+                      <ion-select-option value="+6">+6</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Wound Mod</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="attacker.woundRollMod">
+                      <ion-select-option value="+0">No</ion-select-option>
+                      <ion-select-option value="A">Auto</ion-select-option>
+                      <ion-select-option value="+1">+1</ion-select-option>
+                      <ion-select-option value="+2">+2</ion-select-option>
+                      <ion-select-option value="+3">+3</ion-select-option>
+                      <ion-select-option value="+4">+4</ion-select-option>
+                      <ion-select-option value="+5">+5</ion-select-option>
+                      <ion-select-option value="+6">+6</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Hit Reroll</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="attacker.rerollShots">
+                      <ion-select-option value="-">No</ion-select-option>
+                      <ion-select-option value="all">All</ion-select-option>
+                      <ion-select-option value="one">Ones</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Wound Reroll</ion-label>
+                    <ion-select placeholder="Select" [(ngModel)]="attacker.rerollWounds">
+                      <ion-select-option value="-">No</ion-select-option>
+                      <ion-select-option value="all">All</ion-select-option>
+                      <ion-select-option value="one">Ones</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>AP on '6'</ion-label>
+                    <ion-input [(ngModel)]="attacker.apOn6"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label># Hit on '6'</ion-label>
+                    <ion-input [(ngModel)]="attacker.shotCountOn6"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label># Dmg on '6'</ion-label>
+                    <ion-input [(ngModel)]="attacker.dmgOn6"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label># Mortal on '6'</ion-label>
+                    <ion-input [(ngModel)]="attacker.mortalOn6"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Hit on '6'</ion-label>
+                    <ion-checkbox slot="end" [(ngModel)]="attacker.autoHit6"></ion-checkbox>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Wound on '6'</ion-label>
+                    <ion-checkbox slot="end" [(ngModel)]="attacker.autoWound6"></ion-checkbox>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+
+              <ion-row><br /></ion-row>
+            </ion-grid>
+
+          </ion-slide>
+        </ion-slides>
+
+      </ion-col>
+
+    </ion-row>
+  </ion-list>
+
+</ion-content>
